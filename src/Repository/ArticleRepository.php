@@ -260,7 +260,7 @@ class ArticleRepository
              LIMIT 50'
         );
 
-        $stmt->execute([':search' => $searchTerm]);
+        $stmt->execute(['search' => $searchTerm]);
 
         while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
             yield Article::fromDatabaseRow($row);
