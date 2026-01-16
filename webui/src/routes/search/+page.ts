@@ -5,7 +5,7 @@ import { redirect } from '@sveltejs/kit';
 export const load: PageLoad = async ({ fetch, url }) => {
   const searchQuery = url.searchParams.get('q');
 
-  if (!searchQuery) {
+  if (!searchQuery?.trim()) {
     throw redirect(302, '/');
   }
 
