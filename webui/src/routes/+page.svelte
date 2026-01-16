@@ -51,7 +51,7 @@
 <div class="pure-u-1-1 l-box">
   <div class="pure-g">
     <div class="pure-u-1 pure-u-md-1-2">
-      <div style="padding-right: 1em;">
+      <div>
         Paste a link to an article:
         <form on:submit|preventDefault={debaitButtonClicked}>
           <input type="text" bind:value={inputArticleUrl} style="width: 100%; max-width: 300px;" />
@@ -60,7 +60,7 @@
       </div>
     </div>
     <div class="pure-u-1 pure-u-md-1-2">
-      <div style="padding-left: 1em;">
+      <div style="margin-top: 1em;">
         Search for articles by title (any variation):
         <form on:submit|preventDefault={handleSearch}>
           <input
