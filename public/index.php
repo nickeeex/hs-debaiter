@@ -36,6 +36,7 @@ $router->map('GET', '/', function (ServerRequestInterface $request): ResponseInt
 $router->map('GET', '/articles/todays-changed', [ArticleController::class, 'getTodaysChangedArticles']);
 $router->map('GET', '/articles/frequently-changed', [ArticleController::class, 'getFrequentlyChangedArticles']);
 $router->map('GET', '/articles/category/{category}', [ArticleController::class, 'getCategoryArticles']);
+$router->map('GET', '/articles/search', [ArticleController::class, 'searchArticles']);
 $router->map('GET', '/article/{guid}', [ArticleController::class, 'getArticle']);
 $router->map('GET', '/categories', [CategoryController::class, 'getCategories']);
 

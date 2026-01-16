@@ -86,4 +86,22 @@ class ArticleController
 
         return $response;
     }
+
+    public function searchArticles(ServerRequestInterface $request): ResponseInterface
+    {
+        $queryParams = $request->getQueryParams();
+        $query = $queryParams['q'] ?? '';
+
+        $articles = [];
+        if (!empty($query)) {
+            $articles = iterator_to_array($this->articleRepository->searchArticles($query));
+        }
+
+        $response = (new Response())
+            ->withHeader('Content-Type', 'application/json');
+
+        $response->getBody()->write($this->serializer->serialize($articles, 'json'));
+
+        return $response;
+    }
 }

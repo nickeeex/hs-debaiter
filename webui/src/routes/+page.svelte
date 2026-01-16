@@ -6,6 +6,7 @@
   export let data;
 
   let inputArticleUrl: string;
+  let searchQuery: string = data.searchQuery || '';
 
   const debaitButtonClicked = async () => {
     // Parse the URL to get the GUID from it
@@ -22,6 +23,14 @@
     }
   };
 
+  const handleSearch = async () => {
+    if (searchQuery.trim()) {
+      await goto(`/?q=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      await goto('/');
+    }
+  };
+
   const tagLine = 'See beyond the veil and expose the true agenda';
   $og = {
     ...DEFAULT_OG,
@@ -35,33 +44,58 @@
 </div>
 
 <div class="pure-u-1-1 l-box">
-  Paste a link to an article:
-  <form on:submit|preventDefault={debaitButtonClicked}>
-    <input type="text" bind:value={inputArticleUrl} />
-    <button>Debait</button>
+  <h3>Search for articles by title (any variation):</h3>
+  <form on:submit|preventDefault={handleSearch}>
+    <input type="text" bind:value={searchQuery} placeholder="Search for any title..." style="width: 300px;" />
+    <button>Search</button>
   </form>
 </div>
 
-<div class="pure-u-1-1 l-box">
-  <h2>Articles with title changes (last 24 hours)</h2>
+{#if data.searchQuery}
+  <div class="pure-u-1-1 l-box">
+    <h2>Search Results for "{data.searchQuery}"</h2>
+    {#if data.searchResults.length > 0}
+      <ul>
+        {#each data.searchResults as article}
+          <li>
+            <ArticleSummary {article}></ArticleSummary>
+          </li>
+        {/each}
+      </ul>
+    {:else}
+      <p>No articles found matching your search.</p>
+    {/if}
+  </div>
+{:else}
+  <div class="pure-u-1-1 l-box">
+    Paste a link to an article:
+    <form on:submit|preventDefault={debaitButtonClicked}>
+      <input type="text" bind:value={inputArticleUrl} />
+      <button>Debait</button>
+    </form>
+  </div>
 
-  <ul>
-    {#each data.todaysChangedArticles as article}
-      <li>
-        <ArticleSummary {article}></ArticleSummary>
-      </li>
-    {/each}
-  </ul>
-</div>
+  <div class="pure-u-1-1 l-box">
+    <h2>Articles with title changes (last 24 hours)</h2>
 
-<div class="pure-u-1-1 l-box">
-  <h2>Most updated articles (last 7 days)</h2>
+    <ul>
+      {#each data.todaysChangedArticles as article}
+        <li>
+          <ArticleSummary {article}></ArticleSummary>
+        </li>
+      {/each}
+    </ul>
+  </div>
 
-  <ul>
-    {#each data.frequentlyChangedArticles as article}
-      <li>
-        <ArticleSummary {article}></ArticleSummary>
-      </li>
-    {/each}
-  </ul>
-</div>
+  <div class="pure-u-1-1 l-box">
+    <h2>Most updated articles (last 7 days)</h2>
+
+    <ul>
+      {#each data.frequentlyChangedArticles as article}
+        <li>
+          <ArticleSummary {article}></ArticleSummary>
+        </li>
+      {/each}
+    </ul>
+  </div>
+{/if}

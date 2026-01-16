@@ -230,4 +230,38 @@ class ArticleRepository
             yield ArticleTestTitle::fromDatabaseRow($row);
         }
     }
+
+    public function searchArticles(string $query): \Generator
+    {
+        $searchTerm = '%' . $query . '%';
+        
+        $stmt = $this->pdo->prepare(
+            'SELECT DISTINCT articles.*, 
+                COUNT(DISTINCT article_titles.id) AS num_titles,
+                COUNT(DISTINCT article_test_titles.id) AS num_test_titles
+             FROM articles
+             LEFT OUTER JOIN article_titles ON (article_titles.article_id = articles.id)
+             LEFT OUTER JOIN article_test_titles ON (article_test_titles.article_id = articles.id)
+             WHERE articles.title LIKE :search
+                OR EXISTS (
+                    SELECT 1 FROM article_titles 
+                    WHERE article_titles.article_id = articles.id 
+                    AND article_titles.title LIKE :search
+                )
+                OR EXISTS (
+                    SELECT 1 FROM article_test_titles 
+                    WHERE article_test_titles.article_id = articles.id 
+                    AND article_test_titles.title LIKE :search
+                )
+             GROUP BY articles.id
+             ORDER BY articles.created_at DESC
+             LIMIT 50'
+        );
+
+        $stmt->execute([':search' => $searchTerm]);
+
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            yield Article::fromDatabaseRow($row);
+        }
+    }
 }
