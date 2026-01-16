@@ -31,6 +31,11 @@
     }
   };
 
+  const clearSearch = async () => {
+    searchQuery = '';
+    await goto('/');
+  };
+
   const tagLine = 'See beyond the veil and expose the true agenda';
   $og = {
     ...DEFAULT_OG,
@@ -44,16 +49,34 @@
 </div>
 
 <div class="pure-u-1-1 l-box">
-  <h3>Search for articles by title (any variation):</h3>
-  <form on:submit|preventDefault={handleSearch}>
-    <input
-      type="text"
-      bind:value={searchQuery}
-      placeholder="Search for any title..."
-      style="width: 300px;"
-    />
-    <button>Search</button>
-  </form>
+  <div class="pure-g">
+    <div class="pure-u-1 pure-u-md-1-2">
+      <div style="padding-right: 1em;">
+        Paste a link to an article:
+        <form on:submit|preventDefault={debaitButtonClicked}>
+          <input type="text" bind:value={inputArticleUrl} style="width: 100%; max-width: 300px;" />
+          <button>Debait</button>
+        </form>
+      </div>
+    </div>
+    <div class="pure-u-1 pure-u-md-1-2">
+      <div style="padding-left: 1em;">
+        <h3 style="margin-top: 0;">Search for articles by title (any variation):</h3>
+        <form on:submit|preventDefault={handleSearch}>
+          <input
+            type="text"
+            bind:value={searchQuery}
+            placeholder="Search for any title..."
+            style="width: 100%; max-width: 300px;"
+          />
+          <button>Search</button>
+          {#if data.searchQuery}
+            <button type="button" on:click={clearSearch}>Clear</button>
+          {/if}
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 
 {#if data.searchQuery}
@@ -71,36 +94,28 @@
       <p>No articles found matching your search.</p>
     {/if}
   </div>
-{:else}
-  <div class="pure-u-1-1 l-box">
-    Paste a link to an article:
-    <form on:submit|preventDefault={debaitButtonClicked}>
-      <input type="text" bind:value={inputArticleUrl} />
-      <button>Debait</button>
-    </form>
-  </div>
-
-  <div class="pure-u-1-1 l-box">
-    <h2>Articles with title changes (last 24 hours)</h2>
-
-    <ul>
-      {#each data.todaysChangedArticles as article}
-        <li>
-          <ArticleSummary {article}></ArticleSummary>
-        </li>
-      {/each}
-    </ul>
-  </div>
-
-  <div class="pure-u-1-1 l-box">
-    <h2>Most updated articles (last 7 days)</h2>
-
-    <ul>
-      {#each data.frequentlyChangedArticles as article}
-        <li>
-          <ArticleSummary {article}></ArticleSummary>
-        </li>
-      {/each}
-    </ul>
-  </div>
 {/if}
+
+<div class="pure-u-1-1 l-box">
+  <h2>Articles with title changes (last 24 hours)</h2>
+
+  <ul>
+    {#each data.todaysChangedArticles as article}
+      <li>
+        <ArticleSummary {article}></ArticleSummary>
+      </li>
+    {/each}
+  </ul>
+</div>
+
+<div class="pure-u-1-1 l-box">
+  <h2>Most updated articles (last 7 days)</h2>
+
+  <ul>
+    {#each data.frequentlyChangedArticles as article}
+      <li>
+        <ArticleSummary {article}></ArticleSummary>
+      </li>
+    {/each}
+  </ul>
+</div>
