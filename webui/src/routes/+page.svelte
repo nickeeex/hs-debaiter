@@ -6,7 +6,7 @@
   export let data;
 
   let inputArticleUrl: string;
-  let searchQuery: string = data.searchQuery || '';
+  let searchQuery: string | undefined = undefined;
 
   const debaitButtonClicked = async () => {
     // Parse the URL to get the GUID from it
@@ -24,16 +24,9 @@
   };
 
   const handleSearch = async () => {
-    if (searchQuery.trim()) {
-      await goto(`/?q=${encodeURIComponent(searchQuery.trim())}`);
-    } else {
-      await goto('/');
+    if (searchQuery?.trim()) {
+      await goto(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
     }
-  };
-
-  const clearSearch = async () => {
-    searchQuery = '';
-    await goto('/');
   };
 
   const tagLine = 'See beyond the veil and expose the true agenda';
@@ -70,31 +63,11 @@
             style="width: 100%; max-width: 300px;"
           />
           <button>Search</button>
-          {#if data.searchQuery}
-            <button type="button" on:click={clearSearch}>Clear</button>
-          {/if}
         </form>
       </div>
     </div>
   </div>
 </div>
-
-{#if data.searchQuery}
-  <div class="pure-u-1-1 l-box">
-    <h2>Search Results for "{data.searchQuery}"</h2>
-    {#if data.searchResults.length > 0}
-      <ul>
-        {#each data.searchResults as article}
-          <li>
-            <ArticleSummary {article}></ArticleSummary>
-          </li>
-        {/each}
-      </ul>
-    {:else}
-      <p>No articles found matching your search.</p>
-    {/if}
-  </div>
-{/if}
 
 <div class="pure-u-1-1 l-box">
   <h2>Articles with title changes (last 24 hours)</h2>
