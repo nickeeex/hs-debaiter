@@ -6,10 +6,17 @@ export const load: PageLoad = async ({ fetch, url }) => {
 
   let searchResults = [];
   if (searchQuery) {
-    const response = await fetch(
-      `${env.PUBLIC_API_BASE_URL}/articles/search?q=${encodeURIComponent(searchQuery)}`
-    );
-    searchResults = await response.json();
+    try {
+      const response = await fetch(
+        `${env.PUBLIC_API_BASE_URL}/articles/search?q=${encodeURIComponent(searchQuery)}`
+      );
+      if (response.ok) {
+        searchResults = await response.json();
+      }
+    } catch (error) {
+      console.error('Search failed:', error);
+      // searchResults remains empty on error
+    }
   }
 
   // Fetch articles

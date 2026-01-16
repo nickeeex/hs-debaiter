@@ -233,7 +233,9 @@ class ArticleRepository
 
     public function searchArticles(string $query): \Generator
     {
-        $searchTerm = '%' . $query . '%';
+        // Escape SQL wildcards to prevent unwanted pattern matching
+        $escapedQuery = str_replace(['%', '_'], ['\\%', '\\_'], $query);
+        $searchTerm = '%' . $escapedQuery . '%';
         
         $stmt = $this->pdo->prepare(
             'SELECT DISTINCT articles.*, 
