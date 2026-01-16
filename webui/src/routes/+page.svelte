@@ -61,7 +61,7 @@
     </div>
     <div class="pure-u-1 pure-u-md-1-2">
       <div style="padding-left: 1em;">
-        <h3 style="margin-top: 0;">Search for articles by title (any variation):</h3>
+        Search for articles by title (any variation):
         <form on:submit|preventDefault={handleSearch}>
           <input
             type="text"
