@@ -1,12 +1,12 @@
 import type { PageLoad } from './$types';
 import { env } from '$env/dynamic/public';
-import { error } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 
 export const load: PageLoad = async ({ fetch, url }) => {
   const searchQuery = url.searchParams.get('q');
 
   if (!searchQuery) {
-    throw error(400, 'Search query is required');
+    throw redirect(302, '/');
   }
 
   let searchResults = [];

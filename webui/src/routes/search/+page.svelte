@@ -15,10 +15,6 @@
     }
   };
 
-  const clearSearch = async () => {
-    await goto('/');
-  };
-
   const tagLine = 'See beyond the veil and expose the true agenda';
   $og = {
     ...DEFAULT_OG,
@@ -43,7 +39,7 @@
           style="width: 100%; max-width: 300px;"
         />
         <button>Search</button>
-        <button type="button" on:click={clearSearch}>Clear</button>
+        <a href="/" style="margin-left: 0.5em;">Back to main page</a>
       </form>
     </div>
   </div>
