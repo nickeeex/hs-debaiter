@@ -46,7 +46,12 @@
 <div class="pure-u-1-1 l-box">
   <h3>Search for articles by title (any variation):</h3>
   <form on:submit|preventDefault={handleSearch}>
-    <input type="text" bind:value={searchQuery} placeholder="Search for any title..." style="width: 300px;" />
+    <input
+      type="text"
+      bind:value={searchQuery}
+      placeholder="Search for any title..."
+      style="width: 300px;"
+    />
     <button>Search</button>
   </form>
 </div>

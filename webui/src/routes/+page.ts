@@ -6,7 +6,9 @@ export const load: PageLoad = async ({ fetch, url }) => {
 
   let searchResults = [];
   if (searchQuery) {
-    const response = await fetch(`${env.PUBLIC_API_BASE_URL}/articles/search?q=${encodeURIComponent(searchQuery)}`);
+    const response = await fetch(
+      `${env.PUBLIC_API_BASE_URL}/articles/search?q=${encodeURIComponent(searchQuery)}`
+    );
     searchResults = await response.json();
   }
 
